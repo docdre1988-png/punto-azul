@@ -1,6 +1,5 @@
 import {readFileSync,writeFileSync} from 'node:fs';
 import {createClient} from '@supabase/supabase-js';
-if(process.env.STORE_ID!=='punto-azul')throw Error('Configura STORE_ID=punto-azul');
 if(new URL(process.env.SUPABASE_URL).hostname!=='xoddcucjjlohhgdhnjfl.supabase.co')throw Error('Proyecto incorrecto');
 const db=createClient(process.env.SUPABASE_URL,process.env.SUPABASE_SERVICE_ROLE_KEY,{auth:{persistSession:false}});
 const catalog=JSON.parse(readFileSync('public/catalog.json','utf8'));

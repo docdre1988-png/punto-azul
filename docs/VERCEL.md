@@ -1,6 +1,6 @@
 # Subir a Vercel
 
-1. En Vercel selecciona **Add New → Project** e importa `docdre1988-png/catalogo150` (rama `main`).
+1. En Vercel selecciona **Add New → Project** e importa `docdre1988-png/punto-azul` (rama `main`).
 2. Usa estos ajustes (el repositorio ya los declara):
    - Framework: **Vite**.
    - Root Directory: **./**.

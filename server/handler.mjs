@@ -1,7 +1,7 @@
 import { createClient } from '@supabase/supabase-js';
 import { authenticated, token, cookie, equal, sessionConfigured, sameOrigin } from './auth.mjs';
 let client;
-function db() { if (process.env.STORE_ID !== 'punto-azul') throw new Error('Confirma y activa el proyecto Supabase de PUNTO AZUL con STORE_ID=punto-azul.'); if (!process.env.SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) throw new Error('Falta conectar Supabase en las variables del servidor.'); return client ??= createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY, { auth: { persistSession: false, autoRefreshToken: false } }); }
+function db() { if (!process.env.SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) throw new Error('Falta conectar Supabase en las variables del servidor.'); return client ??= createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY, { auth: { persistSession: false, autoRefreshToken: false } }); }
 const text = (v, max = 200) => typeof v === 'string' && v.trim().length <= max ? v.trim() : '';
 function validate(kind, raw) {
   const name = text(raw.name); if (!name) throw new Error('El nombre es obligatorio (máximo 200 caracteres).');
@@ -18,13 +18,13 @@ export default async function handler(req, res) {
     const action = new URL(req.url, 'http://local').searchParams.get('action') || 'session';
     const method = req.method;
     if (action === 'public' && method === 'GET') {
-      if (process.env.STORE_ID !== 'punto-azul' || !process.env.SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) return send(200, { demo: true });
+      if (!process.env.SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) return send(200, { demo: true });
       const [p,c] = await Promise.all([db().from('products').select('*').eq('visible',true).order('created_at'),db().from('categories').select('*').order('created_at')]);
       if(p.error || c.error) throw new Error('No se pudo cargar el catálogo.');
       return send(200,{products:p.data,categories:c.data});
     }
     if (method !== 'GET') { if (!sameOrigin(req)) return send(403, { error: 'Solicitud no permitida desde otra página.' }); if (!req.headers['content-type']?.startsWith('application/json')) return send(415, { error: 'Se requiere JSON.' }); }
-    if (action === 'session' && method === 'GET') return send(200, { authenticated: authenticated(req.headers.cookie), configured: Boolean(process.env.ADMIN_USER && process.env.ADMIN_PASSWORD && sessionConfigured()), database: Boolean(process.env.STORE_ID === 'punto-azul' && process.env.SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY) });
+    if (action === 'session' && method === 'GET') return send(200, { authenticated: authenticated(req.headers.cookie), configured: Boolean(process.env.ADMIN_USER && process.env.ADMIN_PASSWORD && sessionConfigured()), database: Boolean(process.env.SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY) });
     if (action === 'login' && method === 'POST') {
       if (!process.env.ADMIN_USER || !process.env.ADMIN_PASSWORD) return send(503, { error: 'Configura usuario y contraseña administrativa en el servidor.' });
       const input = await body(req);
