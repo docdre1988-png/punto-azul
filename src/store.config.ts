@@ -1,10 +1,9 @@
-// Identidad y configuración pública de MORVIC SPORT.
+// Identidad pública de PUNTO AZUL. Los secretos permanecen en el servidor.
 export const store = {
-  id: 'morvic-sport', name: 'MORVIC SPORT', tagline: 'ACTIVA TU MEJOR VERSIÓN', industry: 'Deportes',
-  logo: '/logo-morvic.png', whatsapp: '51907279299', currency: 'PEN', locale: 'es-PE',
-  colors: { primary: '#073f3c', accent: '#c8f500', background: '#f6f8f7' },
-  hero: { image: '', eyebrow: 'EL MOVIMIENTO ES TUYO', title: 'SUPERA', titleAccent: 'TUS LÍMITES.', subtitle: 'Tu pasión no se detiene. Encuentra tu próximo equipo y lleva el deporte contigo.' },
-  about: 'En MORVIC SPORT compartimos tu pasión por el deporte. Queremos acompañarte en cada entrenamiento, cada partido y cada nueva meta con un estilo que se mueve contigo.',
-  address: '', hours: '', instagram: '', facebook: '',
-  demo: false,
+  id: 'punto-azul', name: 'PUNTO AZUL', tagline: 'MODA URBANA', industry: 'Ropa urbana',
+  logo: '/logo-punto-azul.png', whatsapp: '51994840197', currency: 'PEN', locale: 'es-PE',
+  colors: { primary: '#0068e8', accent: '#00b9ff', background: '#f5f6f8' },
+  hero: { image: '', eyebrow: 'TU CALLE. TU ESTILO.', title: 'MARCA TU', titleAccent: 'PROPIO PUNTO.', subtitle: 'Prendas con carácter. Combinaciones sin reglas. Descubre la ropa que habla como tú.' },
+  about: 'PUNTO AZUL es una forma de llevar la ciudad contigo. Polos gráficos, denim y capas con personalidad para crear tu propio estilo. Tú eliges la combinación. Tú pones la actitud.',
+  address: '', hours: '', instagram: '', facebook: '', demo: false,
 };

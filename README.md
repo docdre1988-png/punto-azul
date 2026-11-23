@@ -1,53 +1,18 @@
-# ALMA Estudio · Catálogos Digitales Express
+# PUNTO AZUL · Moda urbana
 
-Plantilla React + TypeScript + Vite. Instalación independiente por negocio, sin SaaS ni multiempresa.
+React + TypeScript + Vite. Catálogo, búsqueda, filtros, detalle de producto, bolsa y administración con Supabase. WhatsApp: +51 994 840 197.
 
-## Estado por etapas
+## Desarrollo
 
-- 1 y 2: negocio e identidad actualizados (ALMA Estudio, ropa general, WhatsApp 51907279299).
-- 3: catálogo público, búsqueda, categorías, tallas, bolsa persistente y enlace de pedido por WhatsApp.
-- 4: panel `/admin`, sesión firmada HttpOnly de ocho horas, credenciales en servidor, CRUD y subida de imágenes. [Configuración y uso](docs/ADMINISTRACION.md).
-- Supabase conectado localmente: tablas y bucket comprobados, acceso administrativo verificado. CRUD completo y fotografías pendientes de comprobación en el dominio final.
-- Configuración de Vercel preparada. [Pasos para desplegar](docs/VERCEL.md).
+`npm run dev` · `npm run build` · `npm test`
 
-## Ejecutar
+## Conectar el proyecto nuevo
 
-Requiere Node.js 22.19+ y npm.
+1. Configurar `.env`: `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY` (admite la nueva clave `sb_secret_`), `STORE_ID=punto-azul`, `ADMIN_USER`, `ADMIN_PASSWORD` y `SESSION_SECRET`. Nunca usar prefijo VITE_ para secretos.
+2. Ejecutar `setup-punto-azul.sql` en SQL Editor del proyecto Supabase nuevo. No ejecutar el setup antiguo.
+3. Ejecutar `node --env-file=.env scripts/import-punto-azul.mjs`. Carga fotos a Storage y crea categorías y productos sin borrar los existentes. Puede reanudarse sin duplicarlos.
+4. Configurar las mismas variables de servidor en Vercel para el despliegue. Comprobar `/api/admin?action=public` y `/admin` en el dominio final.
 
-```sh
-npm ci
-npm run dev
-npm run typecheck
-npm test
-npm run build
-```
+Las 20 prendas usan las fotos proporcionadas por el negocio. Precios, tallas y disponibilidad comercial pendientes de confirmación. Sin tallas se muestra Consultar precio, nunca S/ 0.00. Las imágenes locales son copias optimizadas; los originales no se modifican. `public/catalog.json` permite mostrar el catálogo si la API no está disponible.
 
-Abre la URL local que imprime Vite. `npm run preview` sirve el build para revisión local.
-
-## Personalizar
-
-- `src/store.config.ts`: identidad, WhatsApp, colores, contacto, imagen hero y textos. No guardar secretos en este archivo.
-- `public/catalog.json`: categorías, productos y variantes de talla de demostración.
-- `public/logo.svg`: logo original, editable.
-- `public/images/`: recursos locales. Las ilustraciones SVG son originales y reemplazables por fotografías reales.
-- `src/cart.ts`: cálculo en céntimos, saneamiento de bolsa y generación del mensaje.
-
-Los precios se expresan en soles (PEN). `visible: false` oculta un producto; `available: false` impide agregarlo. La bolsa guarda referencias y tallas, y recalcula los precios desde el catálogo al cargar; no guarda precios como fuente de verdad. Máximo 20 unidades por producto/talla. Si el almacenamiento está bloqueado, funciona en memoria y muestra un aviso en la bolsa.
-
-No se realizan pagos ni se envían mensajes automáticamente: el cliente revisa y envía el mensaje en WhatsApp. La disponibilidad y entrega se confirman con el negocio. En modo demo, cada mensaje de pedido lleva un aviso de prueba.
-
-Antes de uso comercial real: reemplazar productos/fotografías/precios, quitar `demo` solo cuando sean reales y completar las etapas de servidor, base de datos y verificación. No publicar una administración sin protección.
-
-## Recursos
-
-Foto hero: [Cute Kid Wearing Beige Sweater · Pexels](https://www.pexels.com/photo/cute-kid-wearing-beige-sweater-7671057/). Descargada el 19/11/2026 bajo [licencia Pexels](https://www.pexels.com/license/), que permite uso comercial sujeto a sus restricciones. Se utiliza como inspiración, no como fotografía de un producto real ni como testimonio del menor.
-
-Tipografías: DM Sans y Manrope desde Google Fonts; fallback sans-serif si no hay conexión. Logo e ilustraciones creados para esta plantilla. `node scripts/create-demo-assets.mjs` regenera únicamente las ilustraciones demo.
-
-Al solicitar **NUEVA TIENDA**, conservar el software y comenzar el descubrimiento del nuevo negocio por etapas.
-
-## Adaptación a ropa general
-
-Categorías Mujer, Hombre y Unisex, tres prendas demo e imágenes referenciales generadas con IA. Se conserva la identidad y las funciones existentes. [Recursos y briefs](docs/IMAGENES-MODA.md). El producto existente en Supabase se conservó al añadir las referencias.
-
-Nueva identidad ALMA Estudio: logo `public/logo-alma.svg`, aplicado desde `src/store.config.ts`. Cuatro prendas demo adicionales conservando los productos existentes.
+La clave pública no es necesaria: el navegador consulta la API del servidor, que custodia la clave privada. El catálogo remoto se activa solo con `STORE_ID=punto-azul` para evitar usar por accidente las credenciales de la plantilla anterior.
